@@ -14,11 +14,16 @@ const zipFilePath = path.join(__dirname, "myfile.zip");
 const pathUnzipped = path.join(__dirname, "unzipped");
 const pathProcessed = path.join(__dirname, "grayscaled");
 
-IOhandler.unzip(zipFilePath, pathUnzipped)
-    .then(() => IOhandler.readDir(pathUnzipped))
-    .then((src) => {
-        const promises = [];
-        src.forEach((fn, i) => promises.push(IOhandler.grayScale(fn, pathProcessed, i)))
-        returnPromise.all(promises)
-    })
-    .catch((err) => console.log(err))
+async function main() {
+    try {
+        await IOhandler.unzip(zipFilePath, pathUnzipped);
+        const src = await IOhandler.readDir(pathUnzipped);
+        await Promise.all(
+            src.map((fn, i) => IOhandler.grayScale(fn, pathProcessed, i))
+        );
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+main();

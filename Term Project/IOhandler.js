@@ -44,9 +44,7 @@ const filteredDir = (src) => {
 };
 
 const filteredPath = (src) => {
-  const fPathJoined = [];
-  src.forEach(fn => fPathJoined.push(`${path.join(__dirname, "unzipped", fn)}`))
-  return fPathJoined;
+  return src.map((fn) => path.join(__dirname, "unzipped", fn));
 };
 
 const readDir = (dir) => {
@@ -87,7 +85,7 @@ const filterGrayScale = (data, height, width) => {
 const errorHandle = (err) => {
   if (err) {
     console.error(`Error: ${err}`);
-    process.exit(1);
+    throw new Error(err);
   }
   console.log("Done!");
 };
